@@ -63,8 +63,8 @@ export default function PreferredFactionColorsSetting() {
                     the Faction Colors listed on the Twilight Imperium Wiki.
                   </Text>
                   <Text>
-                    In edge cases, where an appropriate color is not available,
-                    a color will be chosen from the available colors left.
+                    When an appropriate color is not available, a color will be
+                    chosen from the available colors left.
                   </Text>
                 </Stack>
               </PopoverBody>

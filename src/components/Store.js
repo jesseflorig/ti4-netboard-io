@@ -4,6 +4,7 @@ import { without } from 'lodash';
 import { playerColors, playerFactions } from '../data';
 import {
   extractProp,
+  filterItemsBySets,
   getFactionByName,
   getNewPlayer,
   getNextItem,
@@ -26,6 +27,7 @@ export const initialState = {
   inactivityTimer: 15,
 };
 
+// Compute faction preferred colors
 const adjustPreferredColors = (players, sets) => {
   const validColors = getSetColors(sets);
   let chosenColors = [];
@@ -79,6 +81,37 @@ const adjustPreferredColors = (players, sets) => {
   return adjustedPlayers;
 };
 
+// Filter our invalid factions and recomputer colors
+const scrubPlayers = (players, sets, autoColor) => {
+  const maxPlayers = sets.includes('pok') ? 8 : 6;
+  const validColors = getSetColors(sets);
+  const validFactions = extractProp(
+    filterItemsBySets(playerFactions, sets),
+    'name'
+  );
+
+  let currentValidColors = [];
+  let currentValidFactions = [];
+  const scrubbedPlayers = players.slice(0, maxPlayers).map(player => {
+    const scrubbedColor = validColors.includes(player.color)
+      ? player.color
+      : getNextItem(currentValidColors, validColors);
+
+    const scrubbedFaction = validFactions.includes(player.faction)
+      ? player.faction
+      : getNextItem(currentValidFactions, validFactions);
+
+    currentValidColors.push(scrubbedColor);
+    currentValidFactions.push(scrubbedFaction);
+
+    return { ...player, color: scrubbedColor, faction: scrubbedFaction };
+  });
+
+  return autoColor
+    ? adjustPreferredColors(scrubbedPlayers, sets)
+    : scrubbedPlayers;
+};
+
 export const reducer = (prevState, action) => {
   switch (action.type) {
     case 'UPDATE_VP_LIMIT':
@@ -87,10 +120,15 @@ export const reducer = (prevState, action) => {
       const newSets = prevState.sets.includes('pok')
         ? without(prevState.sets, 'pok')
         : [...prevState.sets, 'pok'];
+      const scrubbedPlayers = scrubPlayers(
+        prevState.players,
+        newSets,
+        prevState.usePreferredColors
+      );
       return {
         ...prevState,
         sets: newSets,
-        players: initialPlayers,
+        players: scrubbedPlayers,
       };
     case 'TOGGLE_PREFERRED_COLORS':
       const adjustedPlayers = action.payload
@@ -112,9 +150,13 @@ export const reducer = (prevState, action) => {
       return { ...prevState, players: adjustedPlayersWithAdded };
     case 'DELETE_PLAYER':
       const toDelete = action.payload;
-      const filteredPlayers = prevState.players.filter(
-        player => player.color !== toDelete.color
-      );
+      // Remove the passed player and reset the IDs
+      const filteredPlayers = prevState.players
+        .filter(player => player.color !== toDelete.color)
+        .map((player, idx) => {
+          return { ...player, id: idx + 1 };
+        });
+
       const adjustedPlayersWithDeleted = prevState.usePreferredColors
         ? adjustPreferredColors(filteredPlayers, prevState.sets)
         : filteredPlayers;

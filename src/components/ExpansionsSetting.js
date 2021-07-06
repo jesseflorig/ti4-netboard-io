@@ -21,23 +21,25 @@ export default function ExpansionsSetting() {
     <>
       <Stack spacing={2}>
         <Heading size="md">Expansions</Heading>
-        <FormControl
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <FormLabel htmlFor="pok-content" mb="0">
-            Prohecy of Kings
-          </FormLabel>
-          <Switch
-            id="pok-content"
-            isChecked={store.sets.includes('pok')}
-            onChange={handleTogglePoK}
-          />
-        </FormControl>
-        <Text as="em" fontSize="sm">
-          +2 player count, +7 factions, new objectives and agendas
-        </Text>
+        <Stack spacing={0}>
+          <FormControl
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <FormLabel htmlFor="pok-content" mb="0">
+              Prohecy of Kings
+            </FormLabel>
+            <Switch
+              id="pok-content"
+              isChecked={store.sets.includes('pok')}
+              onChange={handleTogglePoK}
+            />
+          </FormControl>
+          <Text as="em" fontSize="sm">
+            +2 player count, +7 factions, new objectives and agendas
+          </Text>
+        </Stack>
       </Stack>
     </>
   );
