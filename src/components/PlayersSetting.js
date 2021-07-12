@@ -55,6 +55,7 @@ export default function PlayersSetting() {
                     <IconButton
                       variant="ghost"
                       size="sm"
+                      colorScheme="gray"
                       icon={<DeleteIcon />}
                       value={player}
                       onClick={() => handleDeletePlayer(player)}

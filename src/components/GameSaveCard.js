@@ -16,8 +16,8 @@ import { DateTime } from 'luxon';
 import Store from './Store';
 import { getFactionByName } from '../util';
 
-export default function GameSaveCard({ gameSave, ...props }) {
-  const { dispatch } = React.useContext(Store);
+export default function GameSaveCard({ gameSave, onClose, ...props }) {
+  const { store, dispatch } = React.useContext(Store);
   const { getInputProps, getCheckboxProps } = useRadio(props);
 
   const input = getInputProps();
@@ -29,6 +29,7 @@ export default function GameSaveCard({ gameSave, ...props }) {
 
   const handleDeleteSave = () => {
     dispatch({ type: 'DELETE_SAVE', payload: gameSave.id });
+    if (store.gameSaves.length === 1) onClose();
   };
 
   return (

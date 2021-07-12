@@ -51,7 +51,12 @@ export default function ContinueGame(props) {
                 const radioProps = getRadioProps({ value: save.id });
 
                 return (
-                  <GameSaveCard key={save.id} gameSave={save} {...radioProps} />
+                  <GameSaveCard
+                    key={save.id}
+                    gameSave={save}
+                    onClose={onClose}
+                    {...radioProps}
+                  />
                 );
               })}
             </Stack>
