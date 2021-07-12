@@ -28,7 +28,7 @@ export default function ExpansionsSetting() {
             justifyContent="space-between"
           >
             <FormLabel htmlFor="pok-content" mb="0">
-              Prohecy of Kings
+              Prophecy of Kings
             </FormLabel>
             <Switch
               id="pok-content"

@@ -20,11 +20,11 @@ import Store from './Store';
 
 const maxSteps = 3;
 
-const stepTitle = ['Game Setup', 'Player Setup', 'Dashboard Setup'];
+const stepTitle = ['Game Options', 'Player Selection', 'Netboard Settings'];
 
-export default function BasicUsage() {
+export default function NewGame(props) {
   const [step, setStep] = React.useState(1);
-  const { store } = React.useContext(Store);
+  const { dispatch } = React.useContext(Store);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleNewGame = () => {
@@ -36,7 +36,7 @@ export default function BasicUsage() {
     if (step < maxSteps) {
       setStep(step + 1);
     } else {
-      console.log('store', store);
+      dispatch({ type: 'START_NEW_GAME' });
     }
   };
 
@@ -48,7 +48,9 @@ export default function BasicUsage() {
 
   return (
     <>
-      <Button onClick={handleNewGame}>New Game</Button>
+      <Button {...props} onClick={handleNewGame}>
+        New Game
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

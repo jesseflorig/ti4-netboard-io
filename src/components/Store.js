@@ -3,113 +3,45 @@ import { without } from 'lodash';
 
 import { playerColors, playerFactions } from '../data';
 import {
-  extractProp,
-  filterItemsBySets,
-  getFactionByName,
+  addGame,
+  adjustPreferredColors,
+  loadGameSaves,
+  genGameId,
   getNewPlayer,
-  getNextItem,
-  getSetColors,
+  initialPlayerMeta,
+  saveGames,
+  scrubPlayers,
   sortItemsByField,
 } from '../util';
+
+const newId = genGameId();
 
 const initialSets = ['core'];
 
 const initialPlayers = [
-  { id: 1, color: playerColors[0].color, faction: playerFactions[0].name },
-  { id: 2, color: playerColors[1].color, faction: playerFactions[1].name },
+  {
+    id: 1,
+    color: playerColors[0].color,
+    faction: playerFactions[0].name,
+    ...initialPlayerMeta,
+  },
+  {
+    id: 2,
+    color: playerColors[1].color,
+    faction: playerFactions[1].name,
+    ...initialPlayerMeta,
+  },
 ];
 
 export const initialState = {
+  id: newId,
+  activeGame: false,
+  gameSaves: [],
   victoryPointLimit: 10,
   sets: initialSets,
   usePreferredColors: false,
   players: initialPlayers,
   inactivityTimer: 15,
-};
-
-// Compute faction preferred colors
-const adjustPreferredColors = (players, sets) => {
-  const validColors = getSetColors(sets);
-  let chosenColors = [];
-  let backfill = [];
-
-  const adjustedPlayers = players.map(currentPlayer => {
-    let needsBackfill = true;
-    // Get highest color not beaten by remaining factions
-    const draftPlayer = currentPlayer;
-    const currentColorMap = getFactionByName(currentPlayer.faction).colors;
-    const remainingColorMaps = players
-      .slice(currentPlayer.id)
-      .map(player => getFactionByName(player.faction).colors);
-
-    const currentColors = Object.keys(currentColorMap);
-    let iterationsLeft = currentColors.length;
-    for (const color of currentColors) {
-      iterationsLeft -= 1;
-      const isValid = validColors.includes(color);
-      if (!isValid) {
-        if (iterationsLeft === 0 && needsBackfill) backfill.push(currentPlayer);
-        continue;
-      }
-
-      const targetMax = Math.max(
-        ...extractProp([...remainingColorMaps, { color: 0 }], color, 0)
-      );
-      const isMax = currentColorMap[color] > targetMax;
-      const isTaken = chosenColors.includes(color);
-      if (isMax && !isTaken) {
-        needsBackfill = false;
-        draftPlayer.color = color;
-        chosenColors.push(color);
-        break;
-      }
-
-      if (iterationsLeft === 0 && needsBackfill) backfill.push(currentPlayer);
-    }
-    return draftPlayer;
-  });
-
-  // Backfill players with no preferred options with available colors
-  backfill.map(player => {
-    const idx = player.id - 1;
-    const nextColor = getNextItem(chosenColors, validColors);
-    chosenColors.push(nextColor);
-    adjustedPlayers[idx].color = nextColor;
-    return true;
-  });
-
-  return adjustedPlayers;
-};
-
-// Filter our invalid factions and recomputer colors
-const scrubPlayers = (players, sets, autoColor) => {
-  const maxPlayers = sets.includes('pok') ? 8 : 6;
-  const validColors = getSetColors(sets);
-  const validFactions = extractProp(
-    filterItemsBySets(playerFactions, sets),
-    'name'
-  );
-
-  let currentValidColors = [];
-  let currentValidFactions = [];
-  const scrubbedPlayers = players.slice(0, maxPlayers).map(player => {
-    const scrubbedColor = validColors.includes(player.color)
-      ? player.color
-      : getNextItem(currentValidColors, validColors);
-
-    const scrubbedFaction = validFactions.includes(player.faction)
-      ? player.faction
-      : getNextItem(currentValidFactions, validFactions);
-
-    currentValidColors.push(scrubbedColor);
-    currentValidFactions.push(scrubbedFaction);
-
-    return { ...player, color: scrubbedColor, faction: scrubbedFaction };
-  });
-
-  return autoColor
-    ? adjustPreferredColors(scrubbedPlayers, sets)
-    : scrubbedPlayers;
 };
 
 export const reducer = (prevState, action) => {
@@ -202,6 +134,19 @@ export const reducer = (prevState, action) => {
         ? adjustPreferredColors(sortedPlayers, prevState.sets)
         : sortedPlayers;
       return { ...prevState, players: adjustedPlayersWithUpdate };
+    case 'INIT':
+      // Load avaialable games
+      const gameSaves = loadGameSaves();
+      return { ...prevState, gameSaves };
+    case 'START_NEW_GAME':
+      addGame(prevState);
+      return { ...prevState, activeGame: true };
+    case 'DELETE_SAVE':
+      const newSaves = prevState.gameSaves.filter(
+        saveString => !saveString.includes(action.payload)
+      );
+      saveGames(newSaves);
+      return { ...prevState, gameSaves: newSaves };
     default:
       throw new Error(`Action "${action.type}" not found`);
   }

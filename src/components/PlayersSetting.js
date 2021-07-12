@@ -14,7 +14,7 @@ import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import Store from './Store';
 import ColorPicker from './ColorPicker';
 import FactionPicker from './FactionPicker';
-import PreferredFactionColorsSetting from './PreferredFactionColorsSetting';
+import AutoFactionColorSetting from './AutoFactionColorSetting';
 
 export default function PlayersSetting() {
   const { store, dispatch } = React.useContext(Store);
@@ -32,7 +32,7 @@ export default function PlayersSetting() {
   return (
     <Stack spacing={2}>
       <Heading size="md">Players</Heading>
-      <PreferredFactionColorsSetting />
+      <AutoFactionColorSetting />
       <Box>
         <OrderedList spacing={2}>
           {store.players.map((player, idx) => {

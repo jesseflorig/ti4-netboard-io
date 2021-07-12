@@ -5,6 +5,7 @@ import {
   FormLabel,
   HStack,
   IconButton,
+  Link,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -16,14 +17,14 @@ import {
   Switch,
   Text,
 } from '@chakra-ui/react';
-import { InfoIcon } from '@chakra-ui/icons';
+import { ExternalLinkIcon, InfoIcon } from '@chakra-ui/icons';
 
 import Store from './Store';
 
-export default function PreferredFactionColorsSetting() {
+export default function AutoFactionColorSetting() {
   const { store, dispatch } = React.useContext(Store);
 
-  const handleTogglePreferredColors = e => {
+  const handleToggleAutoColor = e => {
     dispatch({
       type: 'TOGGLE_PREFERRED_COLORS',
       payload: e.target.checked,
@@ -60,11 +61,19 @@ export default function PreferredFactionColorsSetting() {
                 <Stack>
                   <Text>
                     When enabled, colors will be automatically assigned based on
-                    the Faction Colors listed on the Twilight Imperium Wiki.
+                    the{' '}
+                    <Link
+                      href="https://twilight-imperium.fandom.com/wiki/Faction_Colors"
+                      isExternal
+                    >
+                      Faction Colors from the Twilight Imperium Wiki
+                      <ExternalLinkIcon mx={1} />
+                    </Link>
+                    .
                   </Text>
                   <Text>
-                    When an appropriate color is not available, a color will be
-                    chosen from the available colors left.
+                    When an appropriate color is not available, a player color
+                    will be assigned from the available colors left.
                   </Text>
                 </Stack>
               </PopoverBody>
@@ -75,7 +84,7 @@ export default function PreferredFactionColorsSetting() {
       <Switch
         id="use-suggested-colors"
         isChecked={store.usePreferredColors}
-        onChange={handleTogglePreferredColors}
+        onChange={handleToggleAutoColor}
       />
     </FormControl>
   );
