@@ -7,6 +7,7 @@ import {
   Image,
   Stack,
   Tag,
+  Tooltip,
   Text,
   useRadio,
 } from '@chakra-ui/react';
@@ -32,6 +33,8 @@ export default function GameSaveCard({ gameSave, onClose, ...props }) {
     if (store.gameSaves.length === 1) onClose();
   };
 
+  const gameType = gameSave.victoryPointLimit === 10 ? 'Short' : 'Long';
+
   return (
     <HStack>
       <Box as="label" width="25em">
@@ -55,48 +58,55 @@ export default function GameSaveCard({ gameSave, onClose, ...props }) {
           <Stack spacing={2}>
             <HStack justifyContent="space-between">
               <Text fontSize="sm">{saveDate}</Text>
-              {gameSave.sets.includes('pok') && <Tag>PoK</Tag>}
+              {gameSave.sets.includes('pok') && (
+                <Tooltip label="Includes Prophecy of Kings">
+                  <Tag>PoK</Tag>
+                </Tooltip>
+              )}
             </HStack>
             <HStack spacing={2}>
               {gameSave.players.map(player => {
                 const playerFaction = getFactionByName(player.faction);
                 return (
-                  <Box
-                    key={player.id}
-                    borderRadius="md"
-                    borderWidth="1px"
-                    bg={`player.${player.color}`}
-                    title={`${playerFaction.name}`}
-                  >
-                    <Flex
-                      h="2em"
-                      maxW="2em"
-                      p={1}
-                      overflow="hidden"
-                      alignItems="center"
+                  <Tooltip key={player.id} label={`${playerFaction.name}`}>
+                    <Box
+                      borderRadius="md"
+                      borderWidth="1px"
+                      bg={`player.${player.color}`}
                     >
-                      <Image
-                        src={`${process.env.PUBLIC_URL}/faction-symbols/${playerFaction.shortName}.png`}
-                        alt={`${playerFaction.name} faction symbol`}
-                      />
-                    </Flex>
-                  </Box>
+                      <Flex
+                        h="2em"
+                        maxW="2em"
+                        p={1}
+                        overflow="hidden"
+                        alignItems="center"
+                      >
+                        <Image
+                          src={`${process.env.PUBLIC_URL}/faction-symbols/${playerFaction.shortName}.png`}
+                          alt={`${playerFaction.name} faction symbol`}
+                        />
+                      </Flex>
+                    </Box>
+                  </Tooltip>
                 );
               })}
             </HStack>
-            <Text fontSize="xs">{`${gameSave.players.length} players, ${gameSave.victoryPointLimit} VPs`}</Text>
+            <Text fontSize="xs">
+              {`${gameSave.players.length} Player ${gameType} Game (${gameSave.victoryPointLimit} VP) - Round ${gameSave.currentRound}`}
+            </Text>
           </Stack>
         </Box>
       </Box>
-      <IconButton
-        aria-label="Delete Save"
-        icon={<DeleteIcon />}
-        variant="ghost"
-        colorScheme="gray"
-        size="sm"
-        title="Delete Save"
-        onClick={handleDeleteSave}
-      />
+      <Tooltip label="Delete Save">
+        <IconButton
+          aria-label="Delete Save"
+          icon={<DeleteIcon />}
+          variant="ghost"
+          colorScheme="gray"
+          size="sm"
+          onClick={handleDeleteSave}
+        />
+      </Tooltip>
     </HStack>
   );
 }

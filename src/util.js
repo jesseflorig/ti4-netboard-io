@@ -13,10 +13,12 @@ export const addGame = gameData => {
 
   //Initialized data
   const startTime = Math.floor(Date.now() / 1000); // Start time in seconds
+  const currentRound = 1;
 
   const newGame = JSON.stringify({
     id,
     startTime,
+    currentRound,
     players,
     victoryPointLimit,
     inactivityTimer,
