@@ -8,6 +8,7 @@ import {
   ListItem,
   OrderedList,
   Stack,
+  Text,
 } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 
@@ -29,9 +30,15 @@ export default function PlayersSetting() {
     dispatch({ type: 'DELETE_PLAYER', payload: player });
   };
 
+  const hasMaxPlayers = store.players.length >= MAX_PLAYERS;
+
   return (
     <Stack spacing={2}>
       <Heading size="md">Players</Heading>
+      <Text as="em" fontSize="sm">
+        Player 1 will be the initial Speaker; Players should be added in
+        clockwise order
+      </Text>
       <AutoFactionColorSetting />
       <Box>
         <OrderedList spacing={2}>
@@ -67,14 +74,16 @@ export default function PlayersSetting() {
           })}
         </OrderedList>
       </Box>
-      <Button
-        variant="ghost"
-        leftIcon={<AddIcon />}
-        onClick={handleAddPlayer}
-        disabled={store.players.length >= MAX_PLAYERS}
-      >
-        Add Player
-      </Button>
+      {!hasMaxPlayers && (
+        <Button
+          variant="ghost"
+          leftIcon={<AddIcon />}
+          onClick={handleAddPlayer}
+          disabled={hasMaxPlayers}
+        >
+          Add Player
+        </Button>
+      )}
     </Stack>
   );
 }

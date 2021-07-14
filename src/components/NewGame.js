@@ -62,7 +62,7 @@ export default function NewGame(props) {
           <ModalHeader>{`New Game - ${stepTitle[step - 1]}`}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Box height="30em">
+            <Box height="31em">
               {step === 1 && <Step1 />}
               {step === 2 && <Step2 />}
               {step === 3 && <Step3 />}

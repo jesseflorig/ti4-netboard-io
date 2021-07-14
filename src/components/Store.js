@@ -136,16 +136,20 @@ export const reducer = (prevState, action) => {
         : sortedPlayers;
       return { ...prevState, players: adjustedPlayersWithUpdate };
     case 'UPDATE_PLAYER_SCORE':
+      const { playerId, amount } = action.payload;
       const otherPlayers = prevState.players.filter(
-        player => player.id !== action.payload
+        player => player.id !== playerId
       );
 
       const thisPlayer = prevState.players.filter(
-        player => player.id === action.payload
+        player => player.id === playerId
       )[0];
       const currentScore = thisPlayer.victoryPoints;
+      const newScore =
+        (currentScore + amount) % (prevState.victoryPointLimit + 1);
+
       thisPlayer.victoryPoints =
-        (currentScore + 1) % (prevState.victoryPointLimit + 1);
+        newScore >= 0 ? newScore : prevState.victoryPointLimit;
 
       const newScorePlayers = sortItemsByField([...otherPlayers, thisPlayer]);
 

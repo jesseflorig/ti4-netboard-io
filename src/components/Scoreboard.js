@@ -14,8 +14,9 @@ import FactionToken from './FactionToken';
 export default function Scoreboard() {
   const { store, dispatch } = React.useContext(Store);
 
-  const handleTokenClick = playerId => {
-    dispatch({ type: 'UPDATE_PLAYER_SCORE', payload: playerId });
+  const handleTokenClick = (evt, playerId) => {
+    const amount = evt.shiftKey ? -1 : 1;
+    dispatch({ type: 'UPDATE_PLAYER_SCORE', payload: { amount, playerId } });
   };
 
   return (
@@ -42,7 +43,7 @@ export default function Scoreboard() {
                       >
                         <FactionToken
                           player={player}
-                          onClick={() => handleTokenClick(player.id)}
+                          onClick={e => handleTokenClick(e, player.id)}
                           cursor="pointer"
                         />
                       </Flex>
