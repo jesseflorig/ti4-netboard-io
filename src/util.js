@@ -4,6 +4,9 @@ const GAMES_KEY = 'ti4-netboard-games';
 
 export const initialPlayerMeta = {
   victoryPoints: 0,
+  isEliminated: false,
+  currentStrategy: null,
+  currentSecondaryStrategy: null,
 };
 
 // Add the game data to local storage games array
@@ -15,12 +18,14 @@ export const addGame = gameData => {
   const startTime = Math.floor(Date.now() / 1000); // Start time in seconds
   const currentRound = 1;
   const currentPhase = gamePhases[0];
+  const speakerPlayerId = 1;
 
   const newGame = JSON.stringify({
     id,
     startTime,
     currentRound,
     currentPhase,
+    speakerPlayerId,
     players,
     victoryPointLimit: parseInt(victoryPointLimit),
     inactivityTimer,
@@ -98,6 +103,10 @@ export const capitalize = string => {
 
 export const getFactionByName = factionName => {
   return playerFactions.filter(faction => faction.name === factionName)[0];
+};
+
+export const getItemByPropValue = (items = [], prop = 'id', value = 0) => {
+  return items.find(item => item[prop] === value);
 };
 
 export const getSetColors = sets => {
