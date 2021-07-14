@@ -1,4 +1,4 @@
-import { playerColors, playerFactions } from './data';
+import { gamePhases, playerColors, playerFactions } from './data';
 
 const GAMES_KEY = 'ti4-netboard-games';
 
@@ -14,11 +14,13 @@ export const addGame = gameData => {
   //Initialized data
   const startTime = Math.floor(Date.now() / 1000); // Start time in seconds
   const currentRound = 1;
+  const currentPhase = gamePhases[0];
 
   const newGame = JSON.stringify({
     id,
     startTime,
     currentRound,
+    currentPhase,
     players,
     victoryPointLimit,
     inactivityTimer,
@@ -28,6 +30,7 @@ export const addGame = gameData => {
   const newStoredGames = JSON.stringify([...storedGames, newGame]);
 
   localStorage.setItem(GAMES_KEY, newStoredGames);
+  return JSON.parse(newGame);
 };
 
 export const saveGames = saves => {

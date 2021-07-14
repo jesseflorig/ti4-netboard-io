@@ -44,6 +44,7 @@ export const initialState = {
   inactivityTimer: 15,
 };
 
+// TODO: Move all logic out of reducer and only keep function calls
 export const reducer = (prevState, action) => {
   switch (action.type) {
     case 'UPDATE_VP_LIMIT':
@@ -134,19 +135,41 @@ export const reducer = (prevState, action) => {
         ? adjustPreferredColors(sortedPlayers, prevState.sets)
         : sortedPlayers;
       return { ...prevState, players: adjustedPlayersWithUpdate };
+    case 'UPDATE_PLAYER_SCORE':
+      const otherPlayers = prevState.players.filter(
+        player => player.id !== action.payload
+      );
+
+      const thisPlayer = prevState.players.filter(
+        player => player.id === action.payload
+      )[0];
+      const currentScore = thisPlayer.victoryPoints;
+      thisPlayer.victoryPoints =
+        (currentScore + 1) % (prevState.victoryPointLimit + 1);
+
+      const newScorePlayers = sortItemsByField([...otherPlayers, thisPlayer]);
+
+      return { ...prevState, players: newScorePlayers };
     case 'INIT':
       // Load avaialable games
       const gameSaves = loadGameSaves();
       return { ...prevState, gameSaves };
     case 'START_NEW_GAME':
-      addGame(prevState);
-      return { ...prevState, activeGame: true };
+      const newGame = addGame(prevState);
+      return { ...prevState, ...newGame, activeGame: true };
     case 'DELETE_SAVE':
       const newSaves = prevState.gameSaves.filter(
         saveString => !saveString.includes(action.payload)
       );
       saveGames(newSaves);
       return { ...prevState, gameSaves: newSaves };
+    case 'LOAD_SAVE':
+      const currentSave = JSON.parse(
+        prevState.gameSaves.filter(saveString =>
+          saveString.includes(action.payload)
+        )[0]
+      );
+      return { ...prevState, ...currentSave, activeGame: true };
     default:
       throw new Error(`Action "${action.type}" not found`);
   }

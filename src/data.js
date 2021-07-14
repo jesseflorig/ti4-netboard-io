@@ -1,3 +1,16 @@
+export const gamePhases = ['strategy', 'action', 'status', 'agenda'];
+
+export const strategyCards = [
+  'leadership',
+  'diplomacy',
+  'politics',
+  'construction',
+  'trade',
+  'warfare',
+  'technology',
+  'imperial',
+];
+
 export const playerColors = [
   { color: 'black', set: 'core' },
   { color: 'red', set: 'core' },

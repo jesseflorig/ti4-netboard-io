@@ -8,7 +8,7 @@ export default function LandingMenu() {
   return (
     <VStack spacing={4} justifySelf="center">
       <Heading>Netboard.IO</Heading>
-      <Heading size="md">Twilight Imperium Helper</Heading>
+      <Heading size="md">TTI4 Helper - Beta</Heading>
       <Divider />
       <NewGame width="100%" />
       <ContinueGame width="100%" />

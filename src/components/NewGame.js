@@ -19,12 +19,13 @@ import Step3 from './Step3';
 import Store from './Store';
 
 const maxSteps = 3;
+const maxGameSaves = 5;
 
 const stepTitle = ['Game Options', 'Player Selection', 'Netboard Settings'];
 
 export default function NewGame(props) {
   const [step, setStep] = React.useState(1);
-  const { dispatch } = React.useContext(Store);
+  const { store, dispatch } = React.useContext(Store);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleNewGame = () => {
@@ -46,9 +47,12 @@ export default function NewGame(props) {
     }
   };
 
+  const hasMaxGameSaves = store.gameSaves.length >= maxGameSaves;
+
   return (
     <>
-      <Button {...props} onClick={handleNewGame}>
+      {hasMaxGameSaves && <Text fontSize="sm">Maximum Games Reached</Text>}
+      <Button {...props} onClick={handleNewGame} disabled={hasMaxGameSaves}>
         New Game
       </Button>
 

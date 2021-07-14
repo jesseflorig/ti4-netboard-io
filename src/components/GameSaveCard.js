@@ -15,7 +15,7 @@ import { DeleteIcon } from '@chakra-ui/icons';
 import { DateTime } from 'luxon';
 
 import Store from './Store';
-import { getFactionByName } from '../util';
+import { capitalize, getFactionByName } from '../util';
 
 export default function GameSaveCard({ gameSave, onClose, ...props }) {
   const { store, dispatch } = React.useContext(Store);
@@ -33,7 +33,13 @@ export default function GameSaveCard({ gameSave, onClose, ...props }) {
     if (store.gameSaves.length === 1) onClose();
   };
 
-  const gameType = gameSave.victoryPointLimit === 10 ? 'Short' : 'Long';
+  const playerLabel = `${gameSave.players.length} Player`;
+  const gameTypeLabel = `${
+    gameSave.victoryPointLimit === 10 ? 'Short' : 'Long'
+  } Game`;
+  const roundLabel = `Round ${gameSave.currentRound}`;
+  const phaseLabel = `${capitalize(gameSave.currentPhase)} Phase`;
+  const metaLabel = `${playerLabel} ${gameTypeLabel} - ${roundLabel} ${phaseLabel}`;
 
   return (
     <HStack>
@@ -91,9 +97,7 @@ export default function GameSaveCard({ gameSave, onClose, ...props }) {
                 );
               })}
             </HStack>
-            <Text fontSize="xs">
-              {`${gameSave.players.length} Player ${gameType} Game (${gameSave.victoryPointLimit} VP) - Round ${gameSave.currentRound}`}
-            </Text>
+            <Text fontSize="xs">{`${metaLabel}`}</Text>
           </Stack>
         </Box>
       </Box>

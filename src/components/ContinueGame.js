@@ -18,14 +18,18 @@ import GameSaveCard from './GameSaveCard';
 
 export default function ContinueGame(props) {
   const [selectedGameId, setSelectedGameId] = React.useState();
-  const { store } = React.useContext(Store);
+  const { store, dispatch } = React.useContext(Store);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const hasSaveGames = store.gameSaves.length > 0;
 
   const handleChangeSave = saveId => {
     setSelectedGameId(saveId);
-    console.log('chose', saveId);
+  };
+
+  const handleLoadSave = () => {
+    dispatch({ type: 'LOAD_SAVE', payload: selectedGameId });
+    onClose();
   };
 
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -65,7 +69,9 @@ export default function ContinueGame(props) {
             <Button variant="ghost" colorScheme="gray" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button disabled={!selectedGameId}>Continue</Button>
+            <Button onClick={handleLoadSave} disabled={!selectedGameId}>
+              Continue
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

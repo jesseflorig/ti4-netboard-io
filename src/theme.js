@@ -18,6 +18,16 @@ const customTheme = extendTheme(
         red: '#e53e3e',
         yellow: '#d69e2e',
       },
+      strategy: {
+        leadership: '#000',
+        diplomacy: '#000',
+        politics: '#000',
+        construction: '#000',
+        trade: '#000',
+        warfare: '#000',
+        technology: '#000',
+        imperial: '#000',
+      },
     },
     components: {
       Alert: {

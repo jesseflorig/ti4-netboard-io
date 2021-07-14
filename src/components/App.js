@@ -1,9 +1,10 @@
 import React from 'react';
-import { ChakraProvider, Box, Grid, Heading } from '@chakra-ui/react';
+import { ChakraProvider, Box, Grid } from '@chakra-ui/react';
 import theme from '../theme';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 
 import Copyright from './Copyright';
+import ActiveGame from './ActiveGame';
 import LandingMenu from './LandingMenu';
 import Store, { initialState, reducer } from './Store';
 
@@ -21,7 +22,7 @@ function App() {
           <Grid minH="100vh" p={3}>
             <ColorModeSwitcher justifySelf="flex-end" />
             {!store.activeGame && <LandingMenu />}
-            {store.activeGame && <Heading>LETS GO</Heading>}
+            {store.activeGame && <ActiveGame />}
             <Copyright />
           </Grid>
         </Box>
