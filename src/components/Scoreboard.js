@@ -20,7 +20,7 @@ export default function Scoreboard() {
 
   return (
     <Box>
-      <HStack justifyContent="center" alignItems="flex-start" spacing={5}>
+      <HStack justifyContent="center" alignItems="flex-start" spacing={3}>
         {[...Array(store.victoryPointLimit + 1)].map((_, idx) => {
           return (
             <Stack key={`vp-space-${idx}`} spacing={2}>
@@ -28,7 +28,7 @@ export default function Scoreboard() {
                 borderColor="gray.500"
                 borderWidth="1px"
                 borderRadius="md"
-                width="6em"
+                width="5em"
               >
                 <Heading textShadow="0 0 4px red">{idx}</Heading>
               </Box>

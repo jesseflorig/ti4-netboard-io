@@ -22,7 +22,7 @@ export const addGame = gameData => {
     currentRound,
     currentPhase,
     players,
-    victoryPointLimit,
+    victoryPointLimit: parseInt(victoryPointLimit),
     inactivityTimer,
     sets,
   });
