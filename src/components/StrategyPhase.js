@@ -1,10 +1,14 @@
 import React from 'react';
-import { Box, Text } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
+
+import CurrentStrategyAction from './CurrentStrategyAction';
+import StrategyCards from './StrategyCards';
 
 export default function StrategyPhase() {
   return (
-    <Box>
-      <Text>Strat Phase Suff</Text>
-    </Box>
+    <Stack spacing={4}>
+      <CurrentStrategyAction />
+      <StrategyCards />
+    </Stack>
   );
 }

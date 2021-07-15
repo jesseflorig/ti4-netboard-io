@@ -174,6 +174,27 @@ export const reducer = (prevState, action) => {
         )[0]
       );
       return { ...prevState, ...currentSave, activeGame: true };
+    case 'PICK_STRATEGY':
+      // Update the current players strategy and set the next current player
+      const playerCount = prevState.players.length;
+      const nonPickingPlayers = prevState.players.filter(
+        player => player.id !== action.payload.playerId
+      );
+      const pickingPlayer = prevState.players[action.payload.playerId - 1];
+      const pickedStrategy = action.payload.strategy;
+      const updatedField = action.payload.isSecondary
+        ? { currentSecondaryStrategy: pickedStrategy }
+        : { currentStrategy: pickedStrategy };
+      const updatedPlayers = sortItemsByField([
+        ...nonPickingPlayers,
+        { ...pickingPlayer, ...updatedField },
+      ]);
+      const nextPlayerId = (action.payload.playerId % playerCount) + 1;
+      return {
+        ...prevState,
+        players: updatedPlayers,
+        currentPlayerId: nextPlayerId,
+      };
     default:
       throw new Error(`Action "${action.type}" not found`);
   }

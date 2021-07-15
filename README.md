@@ -9,7 +9,7 @@ Clone the repo, install dependencies with `yarn` and run the app with `yarn star
 ## Features
 - [x] New Game Setup
 - [x] Automatic Player Color by Faction
-- [x] Continue Saved Game
+- [x] Continue Saved Game (saved in LocalStorage)
 
 ## Todo
 I have a lot of features planned to free up table real estate and automate some of the more tedious tasks when running a game of TI4. These features include:
@@ -18,3 +18,4 @@ I have a lot of features planned to free up table real estate and automate some 
 - [ ] Automatic scoring
 - [ ] Public Objectives
 - [ ] Agenda Phase Resolver
+- [ ] Import/Export Saves

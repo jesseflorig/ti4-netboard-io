@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Box,
   Flex,
+  Heading,
   HStack,
   Image,
   Stack,
@@ -21,8 +22,8 @@ export default function SpeakerToken() {
 
   return (
     <Flex justifyContent="center">
-      <Stack spacing={1}>
-        <Text fontSize="sm">Current Speaker</Text>
+      <Stack spacing={2}>
+        <Heading size="sm">Current Speaker</Heading>
         <Tooltip label="Change speaker">
           <Box
             borderWidth="1px"

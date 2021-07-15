@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Image, Tooltip } from '@chakra-ui/react';
+import { Box, Flex, Image, Tooltip } from '@chakra-ui/react';
 
 import { capitalize, getFactionByName } from '../util';
 
@@ -14,7 +14,7 @@ export default function FactionToken({
       <Tooltip
         label={`${colorLabel} (${playerFaction.name}) - ${victoryPoints} VP`}
       >
-        <Box
+        <Flex
           height="1.3em"
           maxW="2em"
           borderRadius="md"
@@ -23,12 +23,13 @@ export default function FactionToken({
           py={1}
           overflow="hidden"
           boxShadow="md"
+          justifyContent="center"
         >
           <Image
             src={`${process.env.PUBLIC_URL}/faction-symbols/${playerFaction.shortName}.png`}
             alt={`${playerFaction.name} faction symbol`}
           />
-        </Box>
+        </Flex>
       </Tooltip>
     </Box>
   );

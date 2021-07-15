@@ -19,8 +19,11 @@ export default function Scoreboard() {
     dispatch({ type: 'UPDATE_PLAYER_SCORE', payload: { amount, playerId } });
   };
 
+  // TODO: This works but is not precise; make me better (exact)
+  const fixedHeight = `${(store.players.length / 2) * 1.5 + 3.2}em`;
+
   return (
-    <Box>
+    <Box height={fixedHeight}>
       <HStack justifyContent="center" alignItems="flex-start" spacing={3}>
         {[...Array(store.victoryPointLimit + 1)].map((_, idx) => {
           return (

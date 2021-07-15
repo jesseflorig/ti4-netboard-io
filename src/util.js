@@ -19,6 +19,7 @@ export const addGame = gameData => {
   const currentRound = 1;
   const currentPhase = gamePhases[0];
   const speakerPlayerId = 1;
+  const currentPlayerId = 1;
 
   const newGame = JSON.stringify({
     id,
@@ -26,6 +27,7 @@ export const addGame = gameData => {
     currentRound,
     currentPhase,
     speakerPlayerId,
+    currentPlayerId,
     players,
     victoryPointLimit: parseInt(victoryPointLimit),
     inactivityTimer,

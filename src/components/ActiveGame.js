@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 
 import RountTitle from './RoundTitle';
 import Scoreboard from './Scoreboard';
@@ -14,11 +14,11 @@ export default function ActiveGame() {
   console.log(store);
 
   return (
-    <Box>
+    <Stack spacing={4} justifyContent="space-between">
       <Scoreboard />
       <RountTitle roundNumber={currentRound} phaseName={currentPhase} />
       {currentPhase === 'strategy' && <StrategyPhase />}
       <SpeakerToken />
-    </Box>
+    </Stack>
   );
 }
