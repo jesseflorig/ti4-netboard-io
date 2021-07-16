@@ -4,12 +4,19 @@ import { Box, Divider, Heading, HStack, Stack, Text } from '@chakra-ui/react';
 import Store from './Store';
 import StrategySectionHeading from './StrategySectionHeading';
 import StrategyText from './StrategyText';
+import SelectedStrategyOverlay from './SelectedStrategyOverlay';
 import { strategyCards } from '../data';
-import { capitalize, extractProp } from '../util';
+import { capitalize, extractProp, getItemByPropValue } from '../util';
 
 export default function StrategyCards() {
   const [isSecondary, setIsSecondary] = React.useState(false);
   const { store, dispatch } = React.useContext(Store);
+
+  const isComplete = store.currentPhaseComplete;
+
+  React.useEffect(() => {
+    setIsSecondary(false);
+  }, [isComplete]);
 
   const selectedStrategies = [
     ...extractProp(store.players, 'currentStrategy'),
@@ -17,7 +24,7 @@ export default function StrategyCards() {
   ].filter(strat => !!strat);
 
   const handleStrategyClick = (isSelected, strategy, playerId) => {
-    if (isSelected) return false;
+    if (isSelected || isComplete) return false;
     dispatch({
       type: 'PICK_STRATEGY',
       payload: { strategy, playerId, isSecondary },
@@ -32,17 +39,14 @@ export default function StrategyCards() {
 
     // Check if secondary strategy pick is applicable
     if (needsSecondaryPick && selectedCount === playerCount) {
-      console.log('picking secondary');
       setIsSecondary(true);
     }
 
     //Check if all picks happened
     if (finishedPicking) {
-      console.log('done picking strategies!');
+      dispatch({ type: 'COMPLETE_CURRENT_PHASE' });
     }
   };
-
-  console.log('selected strats', selectedStrategies);
 
   return (
     <Box>
@@ -53,11 +57,28 @@ export default function StrategyCards() {
           const borderColor = isSelected
             ? 'gray.700'
             : `strategy.${strategy.name}`;
-          const cursor = isSelected ? 'not-allowed' : 'pointer';
+          const cursor = isComplete
+            ? 'default'
+            : isSelected
+            ? 'not-allowed'
+            : 'pointer';
           const textColor = isSelected ? 'gray.700' : 'inherit';
+          const strategyPlayer =
+            getItemByPropValue(
+              store.players,
+              'currentStrategy',
+              strategy.name
+            ) ||
+            getItemByPropValue(
+              store.players,
+              'currentSecondaryStrategy',
+              strategy.name
+            );
+
           return (
             <Box
               key={`${strategy.name}-strategy`}
+              position="relative"
               height="22em"
               width="10em"
               bg="gray.900"
@@ -76,6 +97,9 @@ export default function StrategyCards() {
                 )
               }
             >
+              {isSelected && (
+                <SelectedStrategyOverlay player={strategyPlayer} />
+              )}
               <Stack spacing={4} color={textColor}>
                 <Box>
                   <HStack justifyContent="space-between">

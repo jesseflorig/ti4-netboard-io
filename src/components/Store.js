@@ -8,6 +8,7 @@ import {
   loadGameSaves,
   genGameId,
   getNewPlayer,
+  getNextPhase,
   initialPlayerMeta,
   saveGames,
   scrubPlayers,
@@ -194,6 +195,31 @@ export const reducer = (prevState, action) => {
         ...prevState,
         players: updatedPlayers,
         currentPlayerId: nextPlayerId,
+      };
+    case 'RESET_STRATEGY_PHASE':
+      const resetPlayers = prevState.players.map(player => {
+        return {
+          ...player,
+          currentStrategy: null,
+          currentSecondaryStrategy: null,
+        };
+      });
+
+      return {
+        ...prevState,
+        players: resetPlayers,
+        currentPlayerId: 1,
+        currentPhaseComplete: false,
+      };
+    case 'COMPLETE_CURRENT_PHASE':
+      return { ...prevState, currentPhaseComplete: true };
+    case 'NEXT_PHASE':
+      const nextPhase = getNextPhase(prevState.currentPhase);
+      console.log('next phase', nextPhase);
+      return {
+        ...prevState,
+        currentPhase: nextPhase,
+        currentPhaseComplete: false,
       };
     default:
       throw new Error(`Action "${action.type}" not found`);

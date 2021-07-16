@@ -18,16 +18,20 @@ export const addGame = gameData => {
   const startTime = Math.floor(Date.now() / 1000); // Start time in seconds
   const currentRound = 1;
   const currentPhase = gamePhases[0];
+  const currentPhaseDone = false;
   const speakerPlayerId = 1;
   const currentPlayerId = 1;
+  const skippedStrategies = [];
 
   const newGame = JSON.stringify({
     id,
     startTime,
     currentRound,
     currentPhase,
+    currentPhaseDone,
     speakerPlayerId,
     currentPlayerId,
+    skippedStrategies,
     players,
     victoryPointLimit: parseInt(victoryPointLimit),
     inactivityTimer,
@@ -148,6 +152,11 @@ export const getNextItem = (selectedItems = [], availableItems = []) => {
     throw new Error('There are no colors left to choose from');
   }
   return availableItems.filter(color => !selectedItems.includes(color))[0];
+};
+
+export const getNextPhase = currentPhase => {
+  const nextIndex = gamePhases.findIndex(item => item === currentPhase) + 1;
+  return gamePhases[nextIndex > gamePhases.length ? 0 : nextIndex];
 };
 
 // Given arrays A and B, return a random B item that isnt in A
