@@ -215,7 +215,6 @@ export const reducer = (prevState, action) => {
       return { ...prevState, currentPhaseComplete: true };
     case 'NEXT_PHASE':
       const nextPhase = getNextPhase(prevState.currentPhase);
-      console.log('next phase', nextPhase);
       return {
         ...prevState,
         currentPhase: nextPhase,

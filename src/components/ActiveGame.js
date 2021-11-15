@@ -10,12 +10,16 @@ import StrategyPhase from './StrategyPhase';
 
 export default function ActiveGame() {
   const { store } = React.useContext(Store);
-  const { currentRound, currentPhase } = store;
+  const { currentRound, currentPhase, currentTurn } = store;
 
   return (
     <Stack spacing={4} justifyContent="space-between">
       <Scoreboard />
-      <RountTitle roundNumber={currentRound} phaseName={currentPhase} />
+      <RountTitle
+        roundNumber={currentRound}
+        phaseName={currentPhase}
+        turnNumber={currentTurn}
+      />
       {currentPhase === 'strategy' && <StrategyPhase />}
       {currentPhase === 'action' && <ActionPhase />}
       <SpeakerToken />

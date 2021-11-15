@@ -1,14 +1,17 @@
 import React from 'react';
-import { Box, Heading } from '@chakra-ui/react';
+import { Stack, Heading } from '@chakra-ui/react';
 
 import { capitalize } from '../util';
 
-export default function RoundTitle({ roundNumber, phaseName }) {
+export default function RoundTitle({ roundNumber, phaseName, turnNumber }) {
   const phaseLabel = capitalize(phaseName);
 
   return (
-    <Box>
+    <Stack spacing={2}>
       <Heading>{`Round ${roundNumber} ${phaseLabel} Phase`}</Heading>
-    </Box>
+      {phaseName === 'action' && (
+        <Heading size="sm">{`Turn ${turnNumber}`}</Heading>
+      )}
+    </Stack>
   );
 }

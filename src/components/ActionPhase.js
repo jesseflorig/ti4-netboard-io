@@ -1,10 +1,17 @@
 import React from 'react';
-import { Box } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 
 import Store from './Store';
+import CurrentActionTurn from './CurrentActionTurn';
+import InitiativeTracker from './InitiativeTracker';
 
 export default function ActionPhase() {
   const { store } = React.useContext(Store);
 
-  return <Box>Actions stuff</Box>;
+  return (
+    <Stack spacing={4}>
+      <CurrentActionTurn />
+      <InitiativeTracker />
+    </Stack>
+  );
 }

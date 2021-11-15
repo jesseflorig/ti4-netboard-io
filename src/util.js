@@ -16,32 +16,31 @@ export const addGame = gameData => {
 
   //Initialized data
   const startTime = Math.floor(Date.now() / 1000); // Start time in seconds
-  const currentRound = 1;
-  const currentPhase = gamePhases[0];
-  const currentPhaseDone = false;
-  const speakerPlayerId = 1;
-  const currentPlayerId = 1;
-  const skippedStrategies = [];
 
   const newGame = JSON.stringify({
     id,
     startTime,
-    currentRound,
-    currentPhase,
-    currentPhaseDone,
-    speakerPlayerId,
-    currentPlayerId,
-    skippedStrategies,
     players,
-    victoryPointLimit: parseInt(victoryPointLimit),
     inactivityTimer,
     sets,
+    currentRound: 1,
+    currentTurn: 1,
+    currentPhase: gamePhases[0],
+    currentPhaseComplete: false,
+    speakerPlayerId: 1,
+    currentPlayerId: 1,
+    skippedStrategies: [],
+    victoryPointLimit: parseInt(victoryPointLimit),
   });
   const storedGames = JSON.parse(localStorage.getItem(GAMES_KEY)) || [];
   const newStoredGames = JSON.stringify([...storedGames, newGame]);
 
   localStorage.setItem(GAMES_KEY, newStoredGames);
   return JSON.parse(newGame);
+};
+
+export const updateGame = gameData => {
+  return true;
 };
 
 export const saveGames = saves => {
